@@ -1,11 +1,14 @@
 //
-// Title        : UNO2IEC - interface implementation, arduino side.
-// Author       : Lars Wadefalk
+// Title        : IEC2LIB
+// Author       : Skern
 // Version      : 0.1
 // Target MCU   : Arduino Uno AtMega328(H, 5V) at 16 MHz, 2KB SRAM, 32KB flash, 1KB EEPROM.
 //
+//
 // CREDITS:
 // --------
+// The IEC2LIB application is inspired by Lars Wadefalk's UNO2IEC project.
+
 // The UNO2IEC application is inspired by Lars Pontoppidan's MMC2IEC project.
 // It has been ported to C++.
 // The MMC2IEC application is inspired from Jan Derogee's 1541-III project for
@@ -14,10 +17,9 @@
 // features and excludes others.
 //
 // DESCRIPTION:
-// This "interface" class is the main driving logic for the IEC command handling.
+// This Software will be a Lib to Use as britch from c64 to the modern word.
 //
-// Commands from the IEC communication are interpreted, and the appropriate data
-// from either Native, D64, T64, M2I, x00 image formats is sent back.
+// 
 //
 // DISCLAIMER:
 // The author is in no way responsible for any problems or damage caused by
