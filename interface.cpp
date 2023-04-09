@@ -262,17 +262,18 @@ byte Interface::handler(void)
 	interrupts();
 
 	if(retATN == IEC::ATN_ERROR) {
-		strcpy_P(serCmdIOBuf, (PGM_P)F("ATNCMD: IEC_ERROR!"));
+	COMPORT.write("Error ");
 		//log(Error, FAC_IFACE, serCmdIOBuf);
 		
 	}
 	// Did anything happen from the host side?
 	else if(retATN not_eq IEC::ATN_IDLE) {
+   // COMPORT.write("Sting0 ");
 		// A command is recieved, make cmd string null terminated
 		m_cmd.str[m_cmd.strLen] = '\0';
 
 		{
-			COMPORT.write("@ ");
+			
 			//log(Information, FAC_IFACE, serCmdIOBuf);
 		}
 
@@ -283,12 +284,13 @@ byte Interface::handler(void)
 		// check upper nibble, the command itself.
 		switch(m_cmd.code bitand 0xF0) {
 			case IEC::ATN_CODE_OPEN:
+      COMPORT.write("open ");
 				// Open either file or prg for reading, writing or single line command on the command channel.
 				// In any case we just issue an 'OPEN' to the host and let it process.
 				// Note: Some of the host response handling is done LATER, since we will get a TALK or LISTEN after this.
 				// Also, simply issuing the request to the host and not waiting for any response here makes us more
 				// responsive to the CBM here, when the DATA with TALK or LISTEN comes in the next sequence.
-				handleATNCmdCodeOpen(m_cmd);
+				//handleATNCmdCodeOpen(m_cmd);
 			break;
 
 			case IEC::ATN_CODE_DATA:  // data channel opened
@@ -296,28 +298,23 @@ byte Interface::handler(void)
         COMPORT.write("TALK ");
 					 // when the CMD channel is read (status), we first need to issue the host request. The data channel is opened directly.
 					if(15 == chan)
-						handleATNCmdCodeOpen(m_cmd); COMPORT.write(" This is typically an empty command");// This is typically an empty command,
-
-
-
-
-
-
-
-            
-					handleATNCmdCodeDataTalk(chan); // ...but we do expect a response from PC that we can send back to CBM.
+						//handleATNCmdCodeOpen(m_cmd); 
+						COMPORT.write("Comand ");// This is typically an empty command,
+            //handleATNCmdCodeDataTalk(chan); // ...but we do expect a response from PC that we can send back to CBM.
          
 				}
 				else if(retATN == IEC::ATN_CMD_LISTEN){
-        COMPORT.write(" LISTEN ");
-					handleATNCmdCodeDataListen();}
-				else if(retATN == IEC::ATN_CMD) // Here we are sending a command to PC and executing it, but not sending response
-					handleATNCmdCodeOpen(m_cmd);	// back to CBM, the result code of the command is however buffered on the PC side.
+        COMPORT.write("LISTEN ");
+					//handleATNCmdCodeDataListen();
+					}
+				else if(retATN == IEC::ATN_CMD){; // Here we are sending a command to PC and executing it, but not sending response
+				}//handleATNCmdCodeOpen(m_cmd);	// back to CBM, the result code of the command is however buffered on the PC side.
 				break;
 
 			case IEC::ATN_CODE_CLOSE:
 				// handle close with host.
-				handleATNCmdClose();
+				//handleATNCmdClose();
+        COMPORT.write("CLOSE ");
 				break;
 
 			case IEC::ATN_CODE_LISTEN:
@@ -349,7 +346,8 @@ byte Interface::handler(void)
 
 void Interface::handleATNCmdCodeOpen(IEC::ATNCmd& cmd)
 {
-	serCmdIOBuf[0] = 'i';
+	
+	//serCmdIOBuf[0] = '';
 	serCmdIOBuf[2] = cmd.code bitand 0xF;
 	byte length = 3;
 	memcpy(&serCmdIOBuf[length], cmd.str, cmd.strLen);
@@ -434,7 +432,7 @@ void Interface::handleATNCmdCodeDataTalk(byte chan)
 
 void Interface::handleATNCmdCodeDataListen()
 {
-	byte lengthOrResult;
+	/*byte lengthOrResult;
 	boolean wasSuccess = false;
 
 	// process response into m_queuedError.
@@ -466,14 +464,14 @@ void Interface::handleATNCmdCodeDataListen()
 			saveFile();
 //		else // FIXME: Check what the drive does here when saving goes wrong. FNF is probably not right. Dummyread entire buffer from CBM?
 //			m_iec.sendFNF();
-	}
+	}*/
 } // handleATNCmdCodeDataListen
 
 
 void Interface::handleATNCmdClose()
 {
 	// handle close of file. Host system will return the name of the last loaded file to us.
-	COMPORT.print("C");
+	/*
 	COMPORT.readBytes(serCmdIOBuf, 2);
 	byte resp = serCmdIOBuf[0];
 	if('N' == resp or 'n' == resp) { // N indicates we have a name. Case determines whether we loaded or saved data.
@@ -491,5 +489,5 @@ void Interface::handleATNCmdClose()
 	else if('C' == resp) {
 		if(m_iec.deviceNumber() not_eq serCmdIOBuf[1])
 			m_iec.setDeviceNumber(serCmdIOBuf[1]);
-	}
+	}*/
 } // handleATNCmdClose

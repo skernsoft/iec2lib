@@ -41,6 +41,10 @@
 // See timeoutWait below.
 #define TIMEOUT  65000
 
+
+
+
+
 IEC::IEC(byte deviceNumber) :
 	m_state(noFlags), m_deviceNumber(deviceNumber),
 	m_atnPin(DEFAULT_ATN_PIN), m_dataPin(DEFAULT_DATA_PIN),
@@ -48,6 +52,9 @@ IEC::IEC(byte deviceNumber) :
 
 {
 } // ctor
+
+
+
 
 
 byte IEC::timeoutWait(byte waitBit, boolean whileHigh)
@@ -86,12 +93,17 @@ byte IEC::timeoutWait(byte waitBit, boolean whileHigh)
 } // timeoutWait
 
 
+
+
+
+
 // IEC Recieve byte standard function
 //
 // Returns data recieved
 // Might set flags in iec_state
 //
 // FIXME: m_iec might be better returning bool and returning read byte as reference in order to indicate any error.
+
 byte IEC::receiveByte(void)
 {
 	m_state = noFlags;
@@ -144,6 +156,12 @@ byte IEC::receiveByte(void)
 
 	return data;
 } // receiveByte
+
+
+
+
+
+
 
 
 // IEC Send byte standard function
@@ -210,6 +228,11 @@ boolean IEC::sendByte(byte data, boolean signalEOI)
 } // sendByte
 
 
+
+
+
+
+
 // IEC turnaround
 boolean IEC::turnAround(void)
 {
@@ -224,6 +247,11 @@ boolean IEC::turnAround(void)
 
 	return true;
 } // turnAround
+
+
+
+
+
 
 
 // this routine will set the direction on the bus back to normal
@@ -241,6 +269,11 @@ boolean IEC::undoTurnAround(void)
 
 	return true;
 } // undoTurnAround
+
+
+
+
+
 
 
 /******************************************************************************
@@ -443,10 +476,17 @@ boolean IEC::init()
 
 
 
+
+
+
 byte IEC::deviceNumber() const
 {
 	return m_deviceNumber;
 } // deviceNumber
+
+
+
+
 
 
 void IEC::setDeviceNumber(const byte deviceNumber)

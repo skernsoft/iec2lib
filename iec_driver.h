@@ -24,7 +24,8 @@ public:
 		ATN_CMD_LISTEN = 2, // A command is recieved and data is coming to us
 		ATN_CMD_TALK = 3,   // A command is recieved and we must talk now
 		ATN_ERROR = 4,      // A problem occoured, reset communication
-		ATN_RESET = 5				// The IEC bus is in a reset state (RESET line).
+		ATN_RESET = 5,				// The IEC bus is in a reset state (RESET line).
+    Dumy = 6
 	};
 
 	// IEC ATN commands:
@@ -66,9 +67,7 @@ public:
 	//
 	ATNCheck checkATN(ATNCmd& cmd);
 
-	// Checks if CBM is sending a reset (setting the RESET line high). This is typicall
-	// when the CBM is reset itself. In this case, we are supposed to reset all states to initial.
-	//boolean checkRESET();
+	
 
 	// Sends a byte. The communication must be in the correct state: a load command
 	// must just have been recieved. If something is not OK, FALSE is returned.
